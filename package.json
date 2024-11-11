@@ -1,7 +1,7 @@
 {
   "name": "rielyjs",
   "displayNam": "rielyjs",
-  "version": "2.0.1",
+  "version": "2.0.2",
   "description": "Make your bot development easier with Riley.JS!",
   "scripts": {
     "build": "npm version patch & npm publish"

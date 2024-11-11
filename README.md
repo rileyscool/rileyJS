@@ -7,7 +7,7 @@
 
 index.js
 ```javascript
-const rileyjs = require('../Riley.JS/')
+const rileyjs = require('rielyjs')
 const discord = require('discord.js')
 
 require('dotenv').config()
