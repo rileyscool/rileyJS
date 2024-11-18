@@ -6,11 +6,6 @@ interface InitOptions {
   eventsDirectory?: string;
 }
 
-declare function registerSlashCommands(
-  client: Client,
-  commandsDirectory: string,
-): Promise<void>;
-
 declare function init(options: InitOptions): Promise<void>;
 
 interface Embeds {
