@@ -1,25 +1,24 @@
-import { Client, IntentsBitField, EmbedBuilder } from 'discord.js';
+import { Client, IntentsBitField, EmbedBuilder } from "discord.js";
 
 interface InitOptions {
-    client: Client;
-    commandsDirectory?: string;
-    eventsDirectory?: string;
+  client: Client;
+  commandsDirectory?: string;
+  eventsDirectory?: string;
 }
 
-declare function registerSlashCommands(client: Client, commandsDirectory: string): Promise<void>;
+declare function registerSlashCommands(
+  client: Client,
+  commandsDirectory: string,
+): Promise<void>;
 
 declare function init(options: InitOptions): Promise<void>;
 
 interface Embeds {
-    InvalidPermissions: EmbedBuilder;
-    MentionMissing: EmbedBuilder;
+  InvalidPermissions: EmbedBuilder;
+  MentionMissing: EmbedBuilder;
 }
 
 declare const embeds: Embeds;
 declare const allIntents: IntentsBitField;
 
-export {
-    init,
-    embeds,
-    allIntents
-};
+export { init, embeds, allIntents };
