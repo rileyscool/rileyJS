@@ -1,6 +1,6 @@
 
 # rielyJS
-
+rielyJS is a development utility to help you make a discord bot with slash commands so much easier.
 
 
 ## Usage

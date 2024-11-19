@@ -60,7 +60,7 @@ async function init({
         });
     }
     client.on('ready', () => {
-        console.log(`Riley.JS has logged in as ${client.user.tag}`);
+        console.log(`Riely.JS has logged in as ${client.user.tag}`);
     });
 }
 module.exports = {

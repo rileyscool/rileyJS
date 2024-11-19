@@ -1,8 +1,14 @@
 {
   "name": "rielyjs",
+<<<<<<< HEAD
   "displayNam": "rielyjs",
   "version": "2.0.2",
+=======
+  "displayName": "rielyjs",
+  "version": "2.0.1",
+>>>>>>> 890a0014130f79f884e38f5195fbd065a7ecac58
   "description": "Make your bot development easier with Riley.JS!",
+  "types": "./index.d.ts",
   "scripts": {
     "build": "npm version patch & npm publish"
   },
