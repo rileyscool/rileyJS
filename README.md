@@ -21,16 +21,24 @@ bot.login(process.env.token).then(() =>{
 
 commands/ping.js
 ```javascript
-const { SlashCommandBuilder } = require('discord.js');
-
 module.exports = {
-    data: new SlashCommandBuilder()
-        .setName('ping')
-        .setDescription('Replies with Pong!'),
-    async execute(interaction) {
-        await interaction.reply('Pong!')
-    },
-};
+    name: "say",
+    description: "say what you want", 
+    isSlash: true,
+    allowMsg: false, // allow message commands
+    // slashInfo: [],
+    // Use slashInfo for options eg options: [
+    //        {
+    //            type: 'String',
+    //            name: 'insertstring',
+    //            description: 'Target user',
+    //            required: true,
+    //        }
+    //   ]
+    execute(interaction, bot){
+        // do all of that
+    }
+}
 ```
 
 igor stinky :(
