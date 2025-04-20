@@ -6,6 +6,7 @@ const {
   Routes,
   SlashCommandBuilder,
 } = require("discord.js");
+const embeds = require("./embeds.js")
 const fs = require("fs");
 
 async function registerSlashCommands(client, commandsDirectory) {
@@ -117,4 +118,5 @@ async function init(client, settings) {
 }
 module.exports = {
   init,
+  embeds
 };
