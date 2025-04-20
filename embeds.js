@@ -12,7 +12,7 @@ MentionMissing.setColor(`Red`)
 MentionMissing.setDescription(`You need to add a user to use this command!`)
 MentionMissing.setTimestamp()
 
-const EmbedTemplate = discord.EmbedBuilder()
+const EmbedTemplate = new discord.EmbedBuilder()
 EmbedTemplate.setTitle("Title")
 EmbedTemplate.setColor("Random")
 EmbedTemplate.setDescription("Embed Description")
