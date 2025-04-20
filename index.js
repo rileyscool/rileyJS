@@ -158,7 +158,7 @@ async function init(client, settings) {
       if (!command || !command.allowMsg) return;
 
       try {
-        await command.execute(message, args, client);
+        await command.execute(message, client, args);
       } catch (error) {
         console.error(error);
         message.reply("There was an error while executing this command!");
