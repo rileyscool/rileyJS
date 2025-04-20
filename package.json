@@ -1,7 +1,7 @@
 {
   "name": "rielyjs",
   "displayNam": "rielyjs",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Make your bot development easier with Riley.JS!",
   "types": "./index.d.ts",
   "scripts": {
