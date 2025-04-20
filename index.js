@@ -28,22 +28,69 @@ async function registerSlashCommands(client, commandsDirectory) {
 
     if (command.slashInfo) {
       for (const opt of command.slashInfo) {
-        const option = slashCommand[`add${opt.type}Option`]((o) =>
-          o
-            .setName(opt.name)
-            .setDescription(opt.description || "No description")
-            .setRequired(opt.required || false)
-            .addChoices?.(
-              ...(opt.choices || []).map((choice) => ({
-                name: choice.name,
-                value: choice.value,
-              }))
-            )
-        );
+        switch (opt.type) {
+          case 'string':
+            slashCommand.addStringOption(o => {
+              o.setName(opt.name)
+                .setDescription(opt.description || 'No description')
+                .setRequired(opt.required || false);
+              if (opt.choices) {
+                for (const choice of opt.choices) {
+                  o.addChoices({ name: choice.name, value: choice.value });
+                }
+              }
+              return o;
+            });
+            break;
+          case 'integer':
+            slashCommand.addIntegerOption(o => {
+              o.setName(opt.name)
+                .setDescription(opt.description || 'No description')
+                .setRequired(opt.required || false);
+              if (opt.choices) {
+                for (const choice of opt.choices) {
+                  o.addChoices({ name: choice.name, value: choice.value });
+                }
+              }
+              return o;
+            });
+            break;
+          case 'boolean':
+            slashCommand.addBooleanOption(o =>
+              o.setName(opt.name)
+                .setDescription(opt.description || 'No description')
+                .setRequired(opt.required || false)
+            );
+            break;
+          case 'user':
+            slashCommand.addUserOption(o =>
+              o.setName(opt.name)
+                .setDescription(opt.description || 'No description')
+                .setRequired(opt.required || false)
+            );
+            break;
+          case 'channel':
+            slashCommand.addChannelOption(o =>
+              o.setName(opt.name)
+                .setDescription(opt.description || 'No description')
+                .setRequired(opt.required || false)
+            );
+            break;
+          case 'role':
+            slashCommand.addRoleOption(o =>
+              o.setName(opt.name)
+                .setDescription(opt.description || 'No description')
+                .setRequired(opt.required || false)
+            );
+            break;
+          // Add more option types here if needed
+          default:
+            console.warn(`Unknown option type: ${opt.type}`);
+        }
       }
     }
     if (command.isSlash && !command.dev) commands.push(command);
-    if(command.dev) devCommands.push(command)
+    if (command.dev) devCommands.push(command)
     client.commands.set(command.name, command);
   }
   const rest = new REST({ version: "9" }).setToken(client.token);
@@ -107,21 +154,21 @@ async function init(client, settings) {
     });
 
     client.on("messageCreate", async (message) => {
-        if (message.author.bot || !message.content.startsWith(settings.prefix || "-")) return;
-      
-        const args = message.content.slice(1).trim().split(/ +/);
-        const commandName = args.shift().toLowerCase();
-      
-        const command = client.commands.get(commandName);
-        if (!command || !command.allowMsg) return;
-      
-        try {
-          await command.execute(message, args, client);
-        } catch (error) {
-          console.error(error);
-          message.reply("There was an error while executing this command!");
-        }
-      });
+      if (message.author.bot || !message.content.startsWith(settings.prefix || "-")) return;
+
+      const args = message.content.slice(1).trim().split(/ +/);
+      const commandName = args.shift().toLowerCase();
+
+      const command = client.commands.get(commandName);
+      if (!command || !command.allowMsg) return;
+
+      try {
+        await command.execute(message, args, client);
+      } catch (error) {
+        console.error(error);
+        message.reply("There was an error while executing this command!");
+      }
+    });
   }
 
   client.on("ready", () => {
