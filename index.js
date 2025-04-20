@@ -15,7 +15,8 @@ async function registerSlashCommands(client, commandsDirectory) {
       "The provided commands directory is invalid, command handling will be disabled, but Riley.JS should function as expected."
     );
   }
-  const commands = [];
+  var commands = [];
+  var devCommands = []
   const commandFiles = fs
     .readdirSync(commandsDirectory)
     .filter((file) => file.endsWith(".js"));
@@ -41,7 +42,8 @@ async function registerSlashCommands(client, commandsDirectory) {
         );
       }
     }
-    if (command.isSlash) commands.push(command);
+    if (command.isSlash && !command.dev) commands.push(command);
+    if(command.dev) devCommands.push(command)
     client.commands.set(command.name, command);
   }
   const rest = new REST({ version: "9" }).setToken(client.token);
@@ -51,6 +53,14 @@ async function registerSlashCommands(client, commandsDirectory) {
       body: commands,
     });
     console.log("Successfully reloaded application (/) commands.");
+
+    if (devCommands.length >= 1 && client.devID) {
+      console.log("Started refreshing developer application (/) commands.");
+      await rest.put(Routes.applicationGuildCommands(client.user.id, client.devID), {
+        body: devCommands,
+      });
+      console.log("Successfully reloaded developer application (/) commands.");
+    }
   } catch (error) {
     console.error(error);
   }
@@ -58,7 +68,9 @@ async function registerSlashCommands(client, commandsDirectory) {
 
 async function init(client, settings) {
   if (!client) throw "You need to provide a client in the init() function!";
+  if (!settings.devGuild) console.warn("You didn't provide a developer guild. No dev commands will be registered. All other commands will work as expected.")
   client.commands = new Collection();
+  client.devID = settings.devGuild
   // Event Handler
   const { commandsDirectory = false, eventsDirectory = false } = settings;
   // this is aids ^^
