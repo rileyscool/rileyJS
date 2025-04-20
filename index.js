@@ -34,11 +34,6 @@ async function registerSlashCommands(client, commandsDirectory) {
               o.setName(opt.name)
                 .setDescription(opt.description || 'No description')
                 .setRequired(opt.required || false);
-              if (opt.choices) {
-                for (const choice of opt.choices) {
-                  o.addChoices({ name: choice.name, value: choice.value });
-                }
-              }
               return o;
             });
             break;
@@ -89,8 +84,8 @@ async function registerSlashCommands(client, commandsDirectory) {
         }
       }
     }
-    if (command.isSlash && !command.dev) commands.push(command);
-    if (command.dev) devCommands.push(command)
+    if (command.isSlash && !command.dev) commands.push(slashCommand.toJSON());
+    if (command.dev) devCommands.push(slashCommand.toJSON());
     client.commands.set(command.name, command);
   }
   const rest = new REST({ version: "9" }).setToken(client.token);
