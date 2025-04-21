@@ -8,6 +8,7 @@ const {
 } = require("discord.js");
 const embeds = require("./embeds.js")
 const fs = require("fs");
+const path = require("path");
 
 function getAllCommandFiles(dir) {
   let results = [];
