@@ -9,19 +9,36 @@ const {
 const embeds = require("./embeds.js")
 const fs = require("fs");
 
+function getAllCommandFiles(dir) {
+  let results = [];
+  const list = fs.readdirSync(dir);
+  list.forEach((file) => {
+    const filePath = path.join(dir, file);
+    const stat = fs.statSync(filePath);
+    if (stat && stat.isDirectory()) {
+      results = results.concat(getAllCommandFiles(filePath));
+    } else if (file.endsWith(".js")) {
+      results.push(filePath);
+    }
+  });
+  return results;
+}
+
 async function registerSlashCommands(client, commandsDirectory) {
   if (!fs.existsSync(commandsDirectory)) {
     return console.warn(
       "The provided commands directory is invalid, command handling will be disabled, but Riley.JS should function as expected."
     );
   }
-  var commands = [];
-  var devCommands = []
-  const commandFiles = fs
-    .readdirSync(commandsDirectory)
-    .filter((file) => file.endsWith(".js"));
-  for (const file of commandFiles) {
-    const command = require(`${commandsDirectory}/${file}`);
+
+  let commands = [];
+  let devCommands = [];
+  let loadedCount = 0;
+
+  const commandFiles = getAllCommandFiles(commandsDirectory);
+
+  for (const filePath of commandFiles) {
+    const command = require(filePath);
     let slashCommand = new SlashCommandBuilder()
       .setName(command.name)
       .setDescription(command.description);
@@ -78,16 +95,20 @@ async function registerSlashCommands(client, commandsDirectory) {
                 .setRequired(opt.required || false)
             );
             break;
-          // Add more option types here if needed
           default:
             console.warn(`Unknown option type: ${opt.type}`);
         }
       }
     }
+
     if (command.isSlash && !command.dev) commands.push(slashCommand.toJSON());
     if (command.dev) devCommands.push(slashCommand.toJSON());
     client.commands.set(command.name, command);
+    loadedCount++;
   }
+
+  console.log(`Loaded ${loadedCount} commands from ${commandsDirectory}`);
+
   const rest = new REST({ version: "9" }).setToken(client.token);
   try {
     console.log("Started refreshing application (/) commands.");
